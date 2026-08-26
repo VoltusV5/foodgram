@@ -1,19 +1,18 @@
 """ViewSet'ы API для пользователей и подписок."""
 
+from api.v1.pagination import CustomPagination
+from api.v1.serializers.users import (AvatarSerializer, CustomUserSerializer,
+                                      FollowSerializer,
+                                      UserWithRecipesSerializer)
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Prefetch
 from djoser.views import UserViewSet as DjoserUserViewSet
+from recipes.models import Recipe
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-
-from api.v1.pagination import CustomPagination
-from api.v1.serializers.users import (AvatarSerializer, CustomUserSerializer,
-                                      FollowSerializer,
-                                      UserWithRecipesSerializer)
-from recipes.models import Recipe
 from users.models import Follow
 
 UserModel = get_user_model()

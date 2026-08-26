@@ -2,11 +2,10 @@
 
 from typing import TypedDict
 
-from rest_framework import serializers
-
 from api.v1.serializers.fields import Base64ImageField
 from api.v1.serializers.users import CustomUserSerializer
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
+from rest_framework import serializers
 
 
 class RecipeIngredientData(TypedDict):

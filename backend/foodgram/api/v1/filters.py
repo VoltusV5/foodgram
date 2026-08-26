@@ -3,7 +3,6 @@
 import django_filters
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
-
 from recipes.models import Ingredient, Recipe, Tag
 
 UserModel = get_user_model()

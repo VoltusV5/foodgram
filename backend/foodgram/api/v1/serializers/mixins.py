@@ -4,10 +4,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from recipes.models import Favorite, ShoppingCart
 from rest_framework import serializers, status
 from rest_framework.response import Response
-
-from recipes.models import Favorite, ShoppingCart
 
 if TYPE_CHECKING:
     from users.models import User

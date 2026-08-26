@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, TypedDict
 
+from api.v1.serializers.fields import Base64ImageField
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer
+from recipes.models import Favorite, Recipe, ShoppingCart
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
-from api.v1.serializers.fields import Base64ImageField
-from recipes.models import Favorite, Recipe, ShoppingCart
 from users.models import Follow
 
 from .mixins import SubscriptionCheckMixin

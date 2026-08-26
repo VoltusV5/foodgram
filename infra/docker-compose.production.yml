@@ -29,7 +29,7 @@ services:
   gateway:
     image: ${DOCKER_USERNAME}/foodgram_gateway:latest
     ports:
-      - "80:80"
+      - "127.0.0.1:8080:80"
     volumes:
       - static_volume:/static:ro
       - user_files:/media:ro

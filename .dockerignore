@@ -4,8 +4,7 @@
 venv/
 frontend/node_modules
 frontend/build
+db.sqlite3
 
 **/__pycache__/
-**/*.py[cod]
-**/*.sqlite3
 **/.mypy_cache/

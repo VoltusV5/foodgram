@@ -1,6 +1,8 @@
 # Foodgram
 
-Проект доступен по: <https://foodgram-voltusv.duckdns.org/>
+![alt text](images/main_page_with_recipes.png)
+
+Проект доступен по адресу: <https://foodgram-voltusv.duckdns.org/>
 
 Foodgram — это сервис для публикации кулинарных рецептов.
 Пользователь может найти блюда по тегам и ингредиентам, поделиться собственным

@@ -1,0 +1,85 @@
+{
+  "tags": [
+    {"name": "Завтрак", "slug": "breakfast"},
+    {"name": "Обед", "slug": "lunch"},
+    {"name": "Ужин", "slug": "dinner"},
+    {"name": "Десерт", "slug": "dessert"}
+  ],
+  "users": [
+    {
+      "email": "anna@example.com",
+      "username": "anna",
+      "first_name": "Анна",
+      "last_name": "Иванова"
+    },
+    {
+      "email": "boris@example.com",
+      "username": "boris",
+      "first_name": "Борис",
+      "last_name": "Петров"
+    },
+    {
+      "email": "daria@example.com",
+      "username": "daria",
+      "first_name": "Дарья",
+      "last_name": "Соколова"
+    }
+  ],
+  "recipes": [
+    {
+      "key": "panini",
+      "name": "Сытный завтрак",
+      "author": "anna",
+      "text": "Простой рецепт для начала дня.",
+      "cooking_time": 20,
+      "tags": ["breakfast"],
+      "image": "panini.jpg",
+      "ingredients": [
+        {"name": "чиабатта", "measurement_unit": "г", "amount": 200},
+        {"name": "ветчина", "measurement_unit": "г", "amount": 100},
+        {"name": "моцарелла", "measurement_unit": "г", "amount": 100}
+      ]
+    },
+    {
+      "key": "pasta",
+      "name": "Домашний обед",
+      "author": "boris",
+      "text": "Сытное блюдо для семейного обеда.",
+      "cooking_time": 45,
+      "tags": ["lunch", "dinner"],
+      "image": "pasta.jpg",
+      "ingredients": [
+        {"name": "макароны", "measurement_unit": "г", "amount": 300},
+        {"name": "помидоры", "measurement_unit": "г", "amount": 200},
+        {"name": "пармезан", "measurement_unit": "г", "amount": 80}
+      ]
+    },
+    {
+      "key": "pizza",
+      "name": "Пицца",
+      "author": "daria",
+      "text": "Домашняя пицца с помидорами и моцареллой.",
+      "cooking_time": 30,
+      "tags": ["lunch", "dinner"],
+      "image": "pizza.jpg",
+      "ingredients": [
+        {"name": "пшеничная мука", "measurement_unit": "г", "amount": 400},
+        {"name": "помидоры", "measurement_unit": "г", "amount": 200},
+        {"name": "моцарелла для пиццы", "measurement_unit": "г", "amount": 250},
+        {"name": "оливковое масло", "measurement_unit": "г", "amount": 30}
+      ]
+    }
+  ],
+  "relations": {
+    "follows": [
+      {"user": "anna", "author": "boris"},
+      {"user": "boris", "author": "daria"}
+    ],
+    "favorites": [
+      {"user": "anna", "recipe": "pasta"}
+    ],
+    "shopping_cart": [
+      {"user": "boris", "recipe": "pizza"}
+    ]
+  }
+}

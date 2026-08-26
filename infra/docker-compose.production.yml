@@ -12,10 +12,7 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   backend:
-    image: foodgram-backend:local
-    build:
-      context: ..
-      dockerfile: backend/Dockerfile
+    image: ${DOCKER_USERNAME}/foodgram_backend:latest
     env_file:
       - .env
     volumes:
@@ -25,18 +22,12 @@ services:
       - db
 
   frontend:
-    image: foodgram-frontend:local
-    build:
-      context: ..
-      dockerfile: frontend/Dockerfile
+    image: ${DOCKER_USERNAME}/foodgram_frontend:latest
     volumes:
       - static_volume:/static
 
   gateway:
-    image: foodgram-gateway:local
-    build:
-      context: ..
-      dockerfile: infra/Dockerfile
+    image: ${DOCKER_USERNAME}/foodgram_gateway:latest
     ports:
       - "80:80"
     volumes:

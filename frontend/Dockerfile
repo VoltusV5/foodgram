@@ -1,8 +1,11 @@
-# build env
-FROM node:21.7.1-alpine
+FROM node:22-alpine
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . ./
+
+COPY frontend/package*.json ./
+RUN npm ci --legacy-peer-deps
+
+COPY frontend/ ./
 RUN npm run build
-CMD cp -r build result_build
+
+CMD ["sh", "-c", "cp -r /app/build/. /static/"]

@@ -1,0 +1,11 @@
+.git
+.github
+.env
+venv/
+frontend/node_modules
+frontend/build
+
+**/__pycache__/
+**/*.py[cod]
+**/*.sqlite3
+**/.mypy_cache/

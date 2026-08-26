@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 
-from .models import Follow, User
+from .models import Follow, User, UserProfile
 
 admin.site.empty_value_display = '-пусто-'
 
@@ -63,3 +63,12 @@ class FollowAdmin(admin.ModelAdmin):
         'author__username',
     )
     list_select_related = ('user', 'author')
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    """Админка для дополнительных профилей пользователей."""
+
+    list_display = ('user', 'avatar')
+    search_fields = ('user__username', 'user__email')
+    list_select_related = ('user',)

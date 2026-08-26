@@ -35,6 +35,8 @@ ALLOWED_HOSTS = os.getenv(
     'localhost,127.0.0.1',
 ).split(',')
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [

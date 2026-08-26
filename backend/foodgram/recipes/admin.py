@@ -44,6 +44,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     list_filter = ('author', 'tags__name')
     search_fields = ('name', 'author__username', 'tags__name')
+    readonly_fields = ('get_favorites_count',)
 
     @admin.display(description='Текущее изображение')
     def get_image_preview(self, obj):
@@ -86,6 +87,24 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
     list_filter = ('measurement_unit',)
     search_fields = ('name',)
+
+
+@admin.register(RecipeIngredient)
+class RecipeIngredientAdmin(admin.ModelAdmin):
+    """Панель управления ингредиентами рецептов."""
+
+    list_display = ('recipe', 'ingredient', 'amount')
+    search_fields = ('recipe__name', 'ingredient__name')
+    list_select_related = ('recipe', 'ingredient')
+
+
+@admin.register(RecipeTag)
+class RecipeTagAdmin(admin.ModelAdmin):
+    """Панель управления тегами рецептов."""
+
+    list_display = ('recipe', 'tag')
+    search_fields = ('recipe__name', 'tag__name')
+    list_select_related = ('recipe', 'tag')
 
 
 @admin.register(Tag)

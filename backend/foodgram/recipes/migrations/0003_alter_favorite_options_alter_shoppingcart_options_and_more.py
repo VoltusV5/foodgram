@@ -15,7 +15,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name="favorite",
-            options={"verbose_name": "избранное", "verbose_name_plural": "Избранное"},
+            options={
+                "verbose_name": "избранное",
+                "verbose_name_plural": "Избранное",
+            },
         ),
         migrations.AlterModelOptions(
             name="shoppingcart",

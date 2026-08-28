@@ -210,12 +210,18 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
 
         lines = ["Список ингредиентов:\n"]
         for item in aggregated_recipes:
-            lines.append(f"- {item['name']} ({item['unit']}) — {item['total_amount']}")
+            lines.append(
+                f"- {item['name']} ({item['unit']}) — {item['total_amount']}"
+            )
 
         content = "\n".join(lines)
 
-        response = HttpResponse(content, content_type="text/plain; charset=utf-8")
-        response["Content-Disposition"] = 'attachment; filename="shopping-list.txt"'
+        response = HttpResponse(
+            content, content_type="text/plain; charset=utf-8"
+        )
+        response["Content-Disposition"] = (
+            'attachment; filename="shopping-list.txt"'
+        )
         return response
 
 

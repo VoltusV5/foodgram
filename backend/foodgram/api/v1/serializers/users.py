@@ -52,7 +52,9 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         )
 
 
-class CustomUserSerializer(SubscriptionCheckMixin, serializers.ModelSerializer):
+class CustomUserSerializer(
+    SubscriptionCheckMixin, serializers.ModelSerializer
+):
     """Сериализует публичные данные профиля пользователя."""
 
     avatar = Base64ImageField(read_only=True)

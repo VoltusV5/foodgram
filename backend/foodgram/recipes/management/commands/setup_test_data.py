@@ -62,7 +62,7 @@ class Command(BaseCommand):
         """Запрашивает подтверждение очистки данных."""
         answer = (
             input(
-                "Очистить данные пользователей, рецептов и ингредиентов? [y/N]: ",
+                "Очистить пользователей, рецепты и ингредиенты? [y/N]: ",
             )
             .strip()
             .lower()
@@ -108,7 +108,8 @@ class Command(BaseCommand):
         ]
         if missing_variables:
             raise CommandError(
-                "Не заданы переменные окружения: " f'{", ".join(missing_variables)}.',
+                "Не заданы переменные окружения: "
+                f'{", ".join(missing_variables)}.',
             )
 
     def _create_tags(self, tags_data: list[dict]) -> None:

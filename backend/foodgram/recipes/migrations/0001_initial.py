@@ -56,7 +56,9 @@ class Migration(migrations.Migration):
                 (
                     "measurement_unit",
                     models.CharField(
-                        default="г", max_length=50, verbose_name="Единица измерения"
+                        default="г",
+                        max_length=50,
+                        verbose_name="Единица измерения",
                     ),
                 ),
             ],
@@ -80,7 +82,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(max_length=256, verbose_name="Название рецепта"),
+                    models.CharField(
+                        max_length=256, verbose_name="Название рецепта"
+                    ),
                 ),
                 (
                     "image",
@@ -97,7 +101,8 @@ class Migration(migrations.Migration):
                         default=1,
                         validators=[
                             django.core.validators.MinValueValidator(
-                                1, message="Время приготовления должно быть >= 1 минуты"
+                                1,
+                                message="Время приготовления должно быть >= 1 минуты",
                             )
                         ],
                         verbose_name="Время приготовления в минутах",
@@ -134,7 +139,9 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        max_length=50, unique=True, verbose_name="Название тега"
+                        max_length=50,
+                        unique=True,
+                        verbose_name="Название тега",
                     ),
                 ),
                 (
@@ -295,7 +302,8 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="ingredient",
             constraint=models.UniqueConstraint(
-                fields=("name", "measurement_unit"), name="unique_ingredient_unit"
+                fields=("name", "measurement_unit"),
+                name="unique_ingredient_unit",
             ),
         ),
         migrations.AddField(
@@ -333,7 +341,8 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="recipeingredient",
             constraint=models.UniqueConstraint(
-                fields=("recipe", "ingredient"), name="unique_recipe_ingredient"
+                fields=("recipe", "ingredient"),
+                name="unique_recipe_ingredient",
             ),
         ),
         migrations.AddConstraint(

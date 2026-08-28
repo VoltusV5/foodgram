@@ -25,7 +25,8 @@ class IsAuthorOrAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         """Проверяет право пользователя на работу с конкретным объектом."""
         return (
-            request.method in permissions.SAFE_METHODS or request.user.is_authenticated
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_authenticated
         )
 
     def has_object_permission(self, request, view, obj):

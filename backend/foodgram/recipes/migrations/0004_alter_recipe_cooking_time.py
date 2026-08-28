@@ -7,7 +7,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("recipes", "0003_alter_favorite_options_alter_shoppingcart_options_and_more"),
+        (
+            "recipes",
+            "0003_alter_favorite_options_alter_shoppingcart_options_and_more",
+        ),
     ]
 
     operations = [
@@ -17,7 +20,8 @@ class Migration(migrations.Migration):
             field=models.PositiveIntegerField(
                 validators=[
                     django.core.validators.MinValueValidator(
-                        1, message="Время приготовления должно быть >= 1 минуты"
+                        1,
+                        message="Время приготовления должно быть >= 1 минуты",
                     )
                 ],
                 verbose_name="Время приготовления в минутах",

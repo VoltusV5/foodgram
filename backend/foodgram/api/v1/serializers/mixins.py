@@ -75,8 +75,11 @@ class BaseRelationMixin:
         ).delete()
 
         if not deleted_count:
+            model_name = model_class._meta.verbose_name
             return Response(
-                {"errors": f"Объект отсутствует в {model_class._meta.verbose_name}."},
+                {
+                    "errors": f"Объект отсутствует в {model_name}.",
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

@@ -6,7 +6,7 @@ from django.utils.html import format_html
 
 from .models import Follow, User, UserProfile
 
-admin.site.empty_value_display = '-пусто-'
+admin.site.empty_value_display = "-пусто-"
 
 
 @admin.register(User)
@@ -14,33 +14,33 @@ class CustomUserAdmin(UserAdmin):
     """Админка для модели пользователя."""
 
     list_display = (
-        'username',
-        'email',
-        'first_name',
-        'last_name',
-        'get_avatar_preview',
-        'is_active',
-        'is_staff',
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "get_avatar_preview",
+        "is_active",
+        "is_staff",
     )
-    list_editable = ('is_active',)
-    list_filter = ('is_active', 'is_staff')
+    list_editable = ("is_active",)
+    list_filter = ("is_active", "is_staff")
     search_fields = (
-        'username',
-        'email',
-        'first_name',
-        'last_name',
+        "username",
+        "email",
+        "first_name",
+        "last_name",
     )
 
     fieldsets = UserAdmin.fieldsets + (
         (
-            'Дополнительно',
+            "Дополнительно",
             {
-                'fields': ('avatar',),
+                "fields": ("avatar",),
             },
         ),
     )
 
-    @admin.display(description='Аватар')
+    @admin.display(description="Аватар")
     def get_avatar_preview(self, obj):
         """Возвращает превью аватара пользователя."""
         if obj.avatar:
@@ -50,25 +50,25 @@ class CustomUserAdmin(UserAdmin):
                 obj.avatar.url,
             )
 
-        return 'Аватар не загружен'
+        return "Аватар не загружен"
 
 
 @admin.register(Follow)
 class FollowAdmin(admin.ModelAdmin):
     """Админка для управления подписками."""
 
-    list_display = ('user', 'author')
+    list_display = ("user", "author")
     search_fields = (
-        'user__username',
-        'author__username',
+        "user__username",
+        "author__username",
     )
-    list_select_related = ('user', 'author')
+    list_select_related = ("user", "author")
 
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     """Админка для дополнительных профилей пользователей."""
 
-    list_display = ('user', 'avatar')
-    search_fields = ('user__username', 'user__email')
-    list_select_related = ('user',)
+    list_display = ("user", "avatar")
+    search_fields = ("user__username", "user__email")
+    list_select_related = ("user",)

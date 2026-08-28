@@ -5,8 +5,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
-from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                            ShoppingCart, Tag)
+from recipes.models import (
+    Favorite,
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    ShoppingCart,
+    Tag,
+)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, AllowAny, IsAuthenticated
@@ -17,8 +23,12 @@ from ...permissions import IsAuthorOrAdminOrReadOnly
 from ..filters import IngredientFilter, RecipeFilter
 from ..pagination import CustomPagination
 from ..serializers.mixins import BaseRelationMixin
-from ..serializers.recipes import (IngredientSerializer, RecipeReadSerializer,
-                                   RecipeWriteSerializer, TagSerializer)
+from ..serializers.recipes import (
+    IngredientSerializer,
+    RecipeReadSerializer,
+    RecipeWriteSerializer,
+    TagSerializer,
+)
 from ..serializers.users import FavoriteSerializer, ShoppingCartSerializer
 
 
@@ -57,9 +67,9 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
             Дополненный набор рецептов.
         """
         user = self.request.user
-        queryset = Recipe.objects.select_related('author').prefetch_related(
-            'tags',
-            'recipe_ingredients__ingredient',
+        queryset = Recipe.objects.select_related("author").prefetch_related(
+            "tags",
+            "recipe_ingredients__ingredient",
         )
 
         if user.is_anonymous:
@@ -69,13 +79,13 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
             is_favorited=Exists(
                 Favorite.objects.filter(
                     user=user,
-                    recipe=OuterRef('pk'),
+                    recipe=OuterRef("pk"),
                 ),
             ),
             is_in_shopping_cart=Exists(
                 ShoppingCart.objects.filter(
                     user=user,
-                    recipe=OuterRef('pk'),
+                    recipe=OuterRef("pk"),
                 ),
             ),
         )
@@ -102,9 +112,9 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=['get'],
+        methods=["get"],
         permission_classes=[AllowAny],
-        url_path='get-link',
+        url_path="get-link",
     )
     def get_link(self, request: Request, pk: str | None = None) -> Response:
         """Возвращает короткую ссылку на рецепт.
@@ -117,16 +127,17 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
             Ответ с короткой ссылкой.
         """
         recipe = self.get_object()
-        short_url = reverse('short-url', kwargs={'pk': recipe.pk})
+        short_url = reverse("short-url", kwargs={"pk": recipe.pk})
 
         full_short_url = request.build_absolute_uri(short_url)
         return Response(
-            {'short-link': full_short_url}, status=status.HTTP_200_OK,
+            {"short-link": full_short_url},
+            status=status.HTTP_200_OK,
         )
 
     @action(
         detail=True,
-        methods=['post', 'delete'],
+        methods=["post", "delete"],
         permission_classes=[IsAuthenticated],
     )
     def shopping_cart(
@@ -143,12 +154,11 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
         Returns:
             Ответ с рецептом или статусом удаления.
         """
-        return self._manage_relation(
-            ShoppingCart, ShoppingCartSerializer)
+        return self._manage_relation(ShoppingCart, ShoppingCartSerializer)
 
     @action(
         detail=True,
-        methods=['post', 'delete'],
+        methods=["post", "delete"],
         permission_classes=[IsAuthenticated],
     )
     def favorite(self, request: Request, pk: str | None = None) -> Response:
@@ -161,12 +171,11 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
         Returns:
             Ответ с рецептом или статусом удаления.
         """
-        return self._manage_relation(
-            Favorite, FavoriteSerializer)
+        return self._manage_relation(Favorite, FavoriteSerializer)
 
     @action(
         detail=False,
-        methods=['get'],
+        methods=["get"],
         permission_classes=[IsAuthenticated],
     )
     def download_shopping_cart(self, request: Request) -> HttpResponse:
@@ -185,32 +194,28 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
                 recipe__in_shopping_carts__user=user,
             )
             .values(
-                name=F('ingredient__name'),
-                unit=F('ingredient__measurement_unit'),
+                name=F("ingredient__name"),
+                unit=F("ingredient__measurement_unit"),
             )
-            .annotate(total_amount=Sum('amount'))
-            .order_by('name')
+            .annotate(total_amount=Sum("amount"))
+            .order_by("name")
         )
 
         if not aggregated_recipes.exists():
             return HttpResponse(
-                'Ваша корзина пуста.',
+                "Ваша корзина пуста.",
                 status=status.HTTP_400_BAD_REQUEST,
-                content_type='text/plain; charset=utf-8',
+                content_type="text/plain; charset=utf-8",
             )
 
-        lines = ['Список ингредиентов:\n']
+        lines = ["Список ингредиентов:\n"]
         for item in aggregated_recipes:
-            lines.append(
-                f"- {item['name']} ({item['unit']}) — {item['total_amount']}")
+            lines.append(f"- {item['name']} ({item['unit']}) — {item['total_amount']}")
 
-        content = '\n'.join(lines)
+        content = "\n".join(lines)
 
-        response = HttpResponse(
-            content, content_type='text/plain; charset=utf-8')
-        response['Content-Disposition'] = (
-            'attachment; filename="shopping-list.txt"'
-        )
+        response = HttpResponse(content, content_type="text/plain; charset=utf-8")
+        response["Content-Disposition"] = 'attachment; filename="shopping-list.txt"'
         return response
 
 
@@ -228,4 +233,4 @@ def redirect_to_recipe(
         Перенаправление на страницу рецепта.
     """
     recipe = get_object_or_404(Recipe, pk=pk)
-    return redirect(f'/recipes/{recipe.pk}/')
+    return redirect(f"/recipes/{recipe.pk}/")

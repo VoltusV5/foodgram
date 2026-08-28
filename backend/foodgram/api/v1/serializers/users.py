@@ -43,17 +43,16 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
         model = UserModel
         fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'password',
+            "email",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "password",
         )
 
 
-class CustomUserSerializer(
-        SubscriptionCheckMixin, serializers.ModelSerializer):
+class CustomUserSerializer(SubscriptionCheckMixin, serializers.ModelSerializer):
     """Сериализует публичные данные профиля пользователя."""
 
     avatar = Base64ImageField(read_only=True)
@@ -63,16 +62,16 @@ class CustomUserSerializer(
 
         model = UserModel
         fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'is_subscribed',
-            'avatar',
+            "email",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "is_subscribed",
+            "avatar",
         )
 
-        read_only_fields = ('id', 'is_subscribed')
+        read_only_fields = ("id", "is_subscribed")
 
 
 class AvatarSerializer(serializers.ModelSerializer):
@@ -84,7 +83,7 @@ class AvatarSerializer(serializers.ModelSerializer):
         """Задает поля сериализатора аватара."""
 
         model = UserModel
-        fields = ('avatar',)
+        fields = ("avatar",)
 
 
 class FollowSerializer(serializers.ModelSerializer):
@@ -94,7 +93,7 @@ class FollowSerializer(serializers.ModelSerializer):
         """Задает поля связи подписки."""
 
         model = Follow
-        fields = ('user', 'author')
+        fields = ("user", "author")
 
     def validate(self, data: FollowData) -> FollowData:
         """Проверяет, что подписка может быть создана.
@@ -105,15 +104,15 @@ class FollowSerializer(serializers.ModelSerializer):
         Returns:
             Проверенные данные подписки.
         """
-        user = data['user']
-        author = data['author']
+        user = data["user"]
+        author = data["author"]
         if user == author:
             raise serializers.ValidationError(
-                'Нельзя подписаться на себя.',
+                "Нельзя подписаться на себя.",
             )
         if user.follower.filter(author=author).exists():
             raise serializers.ValidationError(
-                'Вы уже подписаны на этого автора.',
+                "Вы уже подписаны на этого автора.",
             )
         return data
 
@@ -140,10 +139,10 @@ class RecipeShortSerializer(serializers.ModelSerializer):
 
         model = Recipe
         fields = (
-            'id',
-            'name',
-            'image',
-            'cooking_time',
+            "id",
+            "name",
+            "image",
+            "cooking_time",
         )
         read_only_fields = fields
 
@@ -162,15 +161,15 @@ class UserWithRecipesSerializer(
 
         model = UserModel
         fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'is_subscribed',
-            'recipes',
-            'recipes_count',
-            'avatar',
+            "email",
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "is_subscribed",
+            "recipes",
+            "recipes_count",
+            "avatar",
         )
         read_only_fields = fields
 
@@ -183,12 +182,12 @@ class UserWithRecipesSerializer(
         Returns:
             Сериализованные краткие данные рецептов.
         """
-        request = self.context.get('request')
-        limit = request.query_params.get('recipes_limit')
+        request = self.context.get("request")
+        limit = request.query_params.get("recipes_limit")
         recipes = obj.recipes.all()
 
         if limit:
-            recipes = recipes[:int(limit)]
+            recipes = recipes[: int(limit)]
         return RecipeShortSerializer(
             recipes,
             many=True,
@@ -204,7 +203,7 @@ class UserWithRecipesSerializer(
         Returns:
             Количество рецептов
         """
-        if hasattr(obj, 'recipes_count'):
+        if hasattr(obj, "recipes_count"):
             return obj.recipes_count
         return obj.recipes.count()
 
@@ -216,8 +215,8 @@ class BaseUserItemRelationSerializer(serializers.ModelSerializer):
         """Задает базовые поля связи для дочерних сериализаторов."""
 
         fields = (
-            'user',
-            'recipe',
+            "user",
+            "recipe",
         )
 
     def validate(
@@ -232,8 +231,8 @@ class BaseUserItemRelationSerializer(serializers.ModelSerializer):
         Returns:
             Проверенные данные связи.
         """
-        user = attrs.get('user')
-        recipe = attrs.get('recipe')
+        user = attrs.get("user")
+        recipe = attrs.get("recipe")
         model = self.Meta.model
 
         if model.objects.filter(user=user, recipe=recipe).exists():

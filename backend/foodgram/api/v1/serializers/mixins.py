@@ -26,11 +26,11 @@ class SubscriptionCheckMixin(metaclass=serializers.SerializerMetaclass):
         Returns:
             True, если текущий пользователь подписан на автора.
         """
-        request = self.context.get('request')
+        request = self.context.get("request")
         if not request or request.user.is_anonymous:
             return False
 
-        if hasattr(obj, 'is_subscribed'):
+        if hasattr(obj, "is_subscribed"):
             return obj.is_subscribed
 
         return request.user.following.filter(author=obj).exists()
@@ -57,26 +57,26 @@ class BaseRelationMixin:
         instance = self.get_object()
         user = self.request.user
 
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             serializer = serializer_class(
                 data={
-                    'user': user.id,
-                    'recipe': instance.id,
+                    "user": user.id,
+                    "recipe": instance.id,
                 },
-                context={'request': self.request},
+                context={"request": self.request},
             )
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         deleted_count, _ = model_class.objects.filter(
-            user=user, recipe=instance,
+            user=user,
+            recipe=instance,
         ).delete()
 
         if not deleted_count:
             return Response(
-                {'errors':
-                 f'Объект отсутствует в {model_class._meta.verbose_name}.'},
+                {"errors": f"Объект отсутствует в {model_class._meta.verbose_name}."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

@@ -1,9 +1,12 @@
 """ViewSet'ы API для пользователей и подписок."""
 
 from api.v1.pagination import CustomPagination
-from api.v1.serializers.users import (AvatarSerializer, CustomUserSerializer,
-                                      FollowSerializer,
-                                      UserWithRecipesSerializer)
+from api.v1.serializers.users import (
+    AvatarSerializer,
+    CustomUserSerializer,
+    FollowSerializer,
+    UserWithRecipesSerializer,
+)
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Prefetch
 from djoser.views import UserViewSet as DjoserUserViewSet
@@ -31,15 +34,15 @@ class CustomUserViewSet(DjoserUserViewSet):
         Returns:
             Список разрешений для текущего действия.
         """
-        if self.action in ('me', 'avatar', 'set_password'):
+        if self.action in ("me", "avatar", "set_password"):
             return [IsAuthenticated()]
         return super().get_permissions()
 
     @action(
         detail=False,
-        methods=['put'],
+        methods=["put"],
         permission_classes=[IsAuthenticated],
-        url_path='me/avatar',
+        url_path="me/avatar",
     )
     def avatar(self, request: Request) -> Response:
         """Создает или обновляет аватар текущего пользователя.
@@ -54,7 +57,7 @@ class CustomUserViewSet(DjoserUserViewSet):
         serializer = AvatarSerializer(
             user,
             data=request.data,
-            context={'request': request},
+            context={"request": request},
         )
         serializer.is_valid(raise_exception=True)
         if user.avatar:
@@ -81,7 +84,7 @@ class CustomUserViewSet(DjoserUserViewSet):
 
     @action(
         detail=False,
-        methods=['get'],
+        methods=["get"],
         permission_classes=[IsAuthenticated],
     )
     def subscriptions(self, request: Request) -> Response:
@@ -93,34 +96,46 @@ class CustomUserViewSet(DjoserUserViewSet):
         Returns:
             Пагинированные данные авторов.
         """
-        authors = UserModel.objects.filter(
-            following__user=request.user,
-        ).annotate(
-            recipes_count=Count('recipes', distinct=True),
-        ).prefetch_related(
-            Prefetch(
-                'recipes',
-                queryset=Recipe.objects.only(
-                    'id', 'name', 'image', 'cooking_time', 'author_id',
+        authors = (
+            UserModel.objects.filter(
+                following__user=request.user,
+            )
+            .annotate(
+                recipes_count=Count("recipes", distinct=True),
+            )
+            .prefetch_related(
+                Prefetch(
+                    "recipes",
+                    queryset=Recipe.objects.only(
+                        "id",
+                        "name",
+                        "image",
+                        "cooking_time",
+                        "author_id",
+                    ),
                 ),
-            ),
+            )
         )
 
         page = self.paginate_queryset(authors)
         if page is not None:
             serializer = UserWithRecipesSerializer(
-                page, many=True, context={'request': request},
+                page,
+                many=True,
+                context={"request": request},
             )
             return self.get_paginated_response(serializer.data)
 
         serializer = UserWithRecipesSerializer(
-            authors, many=True, context={'request': request},
+            authors,
+            many=True,
+            context={"request": request},
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(
         detail=True,
-        methods=['post', 'delete'],
+        methods=["post", "delete"],
         permission_classes=[IsAuthenticated],
     )
     def subscribe(self, request: Request, **kwargs: object) -> Response:
@@ -135,26 +150,27 @@ class CustomUserViewSet(DjoserUserViewSet):
         """
         author = self.get_object()
 
-        if request.method == 'POST':
+        if request.method == "POST":
             serializer = FollowSerializer(
                 data={
-                    'user': request.user.id,
-                    'author': author.id,
+                    "user": request.user.id,
+                    "author": author.id,
                 },
-                context={'request': request},
+                context={"request": request},
             )
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if request.method == 'DELETE':
+        if request.method == "DELETE":
             deleted_count, _ = Follow.objects.filter(
-                user=request.user, author=author,
+                user=request.user,
+                author=author,
             ).delete()
 
             if not deleted_count:
                 return Response(
-                    {'errors': 'Вы не подписаны на этого автора.'},
+                    {"errors": "Вы не подписаны на этого автора."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             return Response(status=status.HTTP_204_NO_CONTENT)

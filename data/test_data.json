@@ -28,9 +28,9 @@
   "recipes": [
     {
       "key": "panini",
-      "name": "Сытный завтрак",
+      "name": "Панини с ветчиной и моцареллой",
       "author": "anna",
-      "text": "Простой рецепт для начала дня.",
+      "text": "Разрежьте чиабатту, выложите ветчину и моцареллу. Обжарьте панини на сухой сковороде под прессом до хрустящей корочки и расплавления сыра.",
       "cooking_time": 20,
       "tags": ["breakfast"],
       "image": "panini.jpg",
@@ -42,9 +42,9 @@
     },
     {
       "key": "pasta",
-      "name": "Домашний обед",
+      "name": "Паста с томатами и пармезаном",
       "author": "boris",
-      "text": "Сытное блюдо для семейного обеда.",
+      "text": "Отварите макароны до состояния аль денте. Прогрейте нарезанные помидоры, смешайте с пастой и перед подачей посыпьте тёртым пармезаном.",
       "cooking_time": 45,
       "tags": ["lunch", "dinner"],
       "image": "pasta.jpg",
@@ -67,6 +67,165 @@
         {"name": "помидоры", "measurement_unit": "г", "amount": 200},
         {"name": "моцарелла для пиццы", "measurement_unit": "г", "amount": 250},
         {"name": "оливковое масло", "measurement_unit": "г", "amount": 30}
+      ]
+    },
+    {
+      "key": "syrniki",
+      "name": "Сырники со сметаной",
+      "author": "anna",
+      "text": "Смешайте творог, яйца, сахар и муку. Сформируйте небольшие сырники, обжарьте с двух сторон до золотистой корочки и подавайте со сметаной.",
+      "cooking_time": 25,
+      "tags": ["breakfast", "dessert"],
+      "image": "syrniki.jpg",
+      "ingredients": [
+        {"name": "творог", "measurement_unit": "г", "amount": 400},
+        {"name": "яйца куриные", "measurement_unit": "г", "amount": 60},
+        {"name": "пшеничная мука", "measurement_unit": "г", "amount": 80},
+        {"name": "сахар", "measurement_unit": "г", "amount": 40},
+        {"name": "сметана", "measurement_unit": "г", "amount": 100}
+      ]
+    },
+    {
+      "key": "borscht",
+      "name": "Домашний борщ",
+      "author": "boris",
+      "text": "Сварите говядину до мягкости. Добавьте картофель и капусту, затем пассерованные лук, морковь и свёклу. Варите до готовности овощей.",
+      "cooking_time": 90,
+      "tags": ["lunch"],
+      "image": "borscht.jpg",
+      "ingredients": [
+        {"name": "говядина", "measurement_unit": "г", "amount": 500},
+        {"name": "свекла", "measurement_unit": "г", "amount": 300},
+        {"name": "капуста белокочанная", "measurement_unit": "г", "amount": 300},
+        {"name": "картофель", "measurement_unit": "г", "amount": 300},
+        {"name": "морковь", "measurement_unit": "г", "amount": 150},
+        {"name": "лук репчатый", "measurement_unit": "г", "amount": 120}
+      ]
+    },
+    {
+      "key": "caesar_salad",
+      "name": "Салат «Цезарь» с курицей",
+      "author": "daria",
+      "text": "Обжарьте куриное филе и нарежьте ломтиками. Соедините салат романо с хрустящими кусочками хлеба, курицей и пармезаном, заправьте оливковым маслом.",
+      "cooking_time": 30,
+      "tags": ["lunch", "dinner"],
+      "image": "caesar_salad.jpg",
+      "ingredients": [
+        {"name": "куриное филе", "measurement_unit": "г", "amount": 300},
+        {"name": "салат романо", "measurement_unit": "г", "amount": 200},
+        {"name": "пармезан", "measurement_unit": "г", "amount": 60},
+        {"name": "хлеб белый", "measurement_unit": "г", "amount": 100},
+        {"name": "оливковое масло", "measurement_unit": "г", "amount": 30}
+      ]
+    },
+    {
+      "key": "pumpkin_soup",
+      "name": "Тыквенный крем-суп",
+      "author": "anna",
+      "text": "Обжарьте лук и чеснок, добавьте кубики тыквы и немного воды. Варите до мягкости, измельчите блендером, влейте сливки и прогрейте.",
+      "cooking_time": 40,
+      "tags": ["lunch", "dinner"],
+      "image": "pumpkin_soup.jpg",
+      "ingredients": [
+        {"name": "тыква", "measurement_unit": "г", "amount": 700},
+        {"name": "сливки", "measurement_unit": "мл", "amount": 200},
+        {"name": "лук репчатый", "measurement_unit": "г", "amount": 120},
+        {"name": "чеснок", "measurement_unit": "г", "amount": 10}
+      ]
+    },
+    {
+      "key": "grilled_salmon",
+      "name": "Лосось с картофелем и салатом",
+      "author": "boris",
+      "text": "Смажьте филе лосося оливковым маслом и обжарьте на гриле. Запеките картофель до золотистой корочки и подавайте рыбу с картофелем и свежим салатным миксом.",
+      "cooking_time": 35,
+      "tags": ["dinner"],
+      "image": "grilled_salmon.jpg",
+      "ingredients": [
+        {"name": "филе лосося", "measurement_unit": "г", "amount": 500},
+        {"name": "картофель", "measurement_unit": "г", "amount": 400},
+        {"name": "салатный микс", "measurement_unit": "г", "amount": 150},
+        {"name": "оливковое масло", "measurement_unit": "г", "amount": 25}
+      ]
+    },
+    {
+      "key": "pancakes",
+      "name": "Панкейки с ягодами",
+      "author": "daria",
+      "text": "Замесите гладкое тесто из молока, яиц, муки и сахара. Выпекайте небольшие панкейки на сухой сковороде и подавайте со свежими ягодами.",
+      "cooking_time": 25,
+      "tags": ["breakfast", "dessert"],
+      "image": "pancakes.jpg",
+      "ingredients": [
+        {"name": "молоко", "measurement_unit": "мл", "amount": 300},
+        {"name": "яйца куриные", "measurement_unit": "г", "amount": 120},
+        {"name": "пшеничная мука", "measurement_unit": "г", "amount": 250},
+        {"name": "сахар", "measurement_unit": "г", "amount": 50},
+        {"name": "ягоды", "measurement_unit": "г", "amount": 150}
+      ]
+    },
+    {
+      "key": "oatmeal",
+      "name": "Овсяная каша с ягодами",
+      "author": "anna",
+      "text": "Залейте овсяные хлопья молоком и варите на слабом огне до мягкости. Добавьте мёд, перемешайте и украсьте ягодами.",
+      "cooking_time": 15,
+      "tags": ["breakfast"],
+      "image": "oatmeal.jpg",
+      "ingredients": [
+        {"name": "овсяные хлопья", "measurement_unit": "г", "amount": 120},
+        {"name": "молоко", "measurement_unit": "мл", "amount": 400},
+        {"name": "мед", "measurement_unit": "г", "amount": 30},
+        {"name": "ягоды", "measurement_unit": "г", "amount": 150}
+      ]
+    },
+    {
+      "key": "cheesecake",
+      "name": "Чизкейк с малиной",
+      "author": "daria",
+      "text": "Измельчите печенье и смешайте со сливочным маслом для основы. Выложите сверху сладкую сырную начинку, запеките, охладите и украсьте малиной.",
+      "cooking_time": 80,
+      "tags": ["dessert"],
+      "image": "cheesecake.jpg",
+      "ingredients": [
+        {"name": "сыр сливочный", "measurement_unit": "г", "amount": 600},
+        {"name": "печенье", "measurement_unit": "г", "amount": 250},
+        {"name": "сливочное масло", "measurement_unit": "г", "amount": 100},
+        {"name": "сахар", "measurement_unit": "г", "amount": 150},
+        {"name": "яйца куриные", "measurement_unit": "г", "amount": 180},
+        {"name": "малина", "measurement_unit": "г", "amount": 200}
+      ]
+    },
+    {
+      "key": "plov",
+      "name": "Плов с бараниной",
+      "author": "boris",
+      "text": "Обжарьте баранину с луком и морковью. Добавьте промытый рис и воду, затем готовьте под крышкой на слабом огне до мягкости риса.",
+      "cooking_time": 75,
+      "tags": ["lunch", "dinner"],
+      "image": "plov.jpg",
+      "ingredients": [
+        {"name": "баранина", "measurement_unit": "г", "amount": 600},
+        {"name": "рис", "measurement_unit": "г", "amount": 500},
+        {"name": "морковь", "measurement_unit": "г", "amount": 400},
+        {"name": "лук репчатый", "measurement_unit": "г", "amount": 250},
+        {"name": "оливковое масло", "measurement_unit": "г", "amount": 80}
+      ]
+    },
+    {
+      "key": "ratatouille",
+      "name": "Рататуй",
+      "author": "daria",
+      "text": "Нарежьте баклажаны, цукини, помидоры и перец. Выложите овощи слоями, сбрызните оливковым маслом и запекайте до мягкости.",
+      "cooking_time": 60,
+      "tags": ["lunch", "dinner"],
+      "image": "ratatouille.jpg",
+      "ingredients": [
+        {"name": "баклажаны", "measurement_unit": "г", "amount": 350},
+        {"name": "цукини", "measurement_unit": "г", "amount": 350},
+        {"name": "помидоры", "measurement_unit": "г", "amount": 400},
+        {"name": "перец болгарский", "measurement_unit": "г", "amount": 250},
+        {"name": "оливковое масло", "measurement_unit": "г", "amount": 40}
       ]
     }
   ],

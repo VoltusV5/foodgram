@@ -6,6 +6,7 @@ volumes:
 services:
   db:
     image: postgres:16
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
@@ -13,6 +14,7 @@ services:
 
   backend:
     image: ${DOCKER_USERNAME}/foodgram_backend:latest
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
@@ -28,6 +30,7 @@ services:
 
   gateway:
     image: ${DOCKER_USERNAME}/foodgram_gateway:latest
+    restart: unless-stopped
     ports:
       - "127.0.0.1:8080:80"
     volumes:

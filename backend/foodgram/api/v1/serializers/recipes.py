@@ -7,6 +7,11 @@ from api.v1.serializers.users import CustomUserSerializer
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from rest_framework import serializers
 
+MIN_COOKING_TIME = 1
+MAX_COOKING_TIME = 32_000
+MIN_INGREDIENT_AMOUNT = 1
+MAX_INGREDIENT_AMOUNT = 32_000
+
 
 class RecipeIngredientData(TypedDict):
     """Описывает проверенные данные ингредиента в рецепте."""
@@ -71,7 +76,10 @@ class RecipeIngredientWriteSerializer(serializers.ModelSerializer):
         source="ingredient",
         queryset=Ingredient.objects.all(),
     )
-    amount = serializers.IntegerField(min_value=1)
+    amount = serializers.IntegerField(
+        min_value=MIN_INGREDIENT_AMOUNT,
+        max_value=MAX_INGREDIENT_AMOUNT,
+    )
 
     class Meta:
         """Задает поля ингредиента рецепта, принимаемые в запросе."""
@@ -121,6 +129,10 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     )
     ingredients = RecipeIngredientWriteSerializer(many=True)
     image = Base64ImageField()
+    cooking_time = serializers.IntegerField(
+        min_value=MIN_COOKING_TIME,
+        max_value=MAX_COOKING_TIME,
+    )
 
     class Meta:
         """Задает поля рецепта, принимаемые эндпоинтами записи."""

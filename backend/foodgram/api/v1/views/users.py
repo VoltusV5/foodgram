@@ -16,7 +16,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from users.models import Follow
 
 UserModel = get_user_model()
 
@@ -163,8 +162,7 @@ class CustomUserViewSet(DjoserUserViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == "DELETE":
-            deleted_count, _ = Follow.objects.filter(
-                user=request.user,
+            deleted_count, _ = request.user.follower.filter(
                 author=author,
             ).delete()
 

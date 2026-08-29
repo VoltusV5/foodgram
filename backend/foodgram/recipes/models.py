@@ -1,10 +1,21 @@
 """Модели рецептов, ингредиентов, тегов и связей."""
 
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 User = get_user_model()
+
+
+TAG_NAME_MAX_LENGTH = 50
+TAG_SLUG_MAX_LENGTH = 150
+INGREDIENT_NAME_MAX_LENGTH = 128
+MEASUREMENT_UNIT_MAX_LENGTH = 50
+RECIPE_NAME_MAX_LENGTH = 256
+MIN_COOKING_TIME = 1
+MAX_COOKING_TIME = 32_000
+MIN_INGREDIENT_AMOUNT = 1
+MAX_INGREDIENT_AMOUNT = 32_000
 
 
 class Tag(models.Model):
@@ -15,8 +26,16 @@ class Tag(models.Model):
         slug: Уникальный URL-идентификатор тега.
     """
 
-    name = models.CharField("Название тега", max_length=50, unique=True)
-    slug = models.SlugField("Слаг тега", max_length=150, unique=True)
+    name = models.CharField(
+        "Название тега",
+        max_length=TAG_NAME_MAX_LENGTH,
+        unique=True,
+    )
+    slug = models.SlugField(
+        "Слаг тега",
+        max_length=TAG_SLUG_MAX_LENGTH,
+        unique=True,
+    )
 
     class Meta:
         """Задает метаданные модели тега."""
@@ -35,16 +54,16 @@ class Ingredient(models.Model):
 
     Attributes:
         name: Название ингредиента.
-        measurement_unit: Единица измерения ингредиента (граммы, литры и т.д.).
+        measurement_unit: Единица измерения ингредиента (граммы, мл и т.д.).
     """
 
     name = models.CharField(
         "Название ингредиента",
-        max_length=128,
+        max_length=INGREDIENT_NAME_MAX_LENGTH,
     )
     measurement_unit = models.CharField(
         "Единица измерения",
-        max_length=50,
+        max_length=MEASUREMENT_UNIT_MAX_LENGTH,
         default="г",
     )
 
@@ -79,7 +98,10 @@ class Recipe(models.Model):
         cooking_time: Время приготовления в минутах.
     """
 
-    name = models.CharField("Название рецепта", max_length=256)
+    name = models.CharField(
+        "Название рецепта",
+        max_length=RECIPE_NAME_MAX_LENGTH,
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -104,12 +126,22 @@ class Recipe(models.Model):
         related_name="recipes",
         verbose_name="Теги",
     )
-    cooking_time = models.PositiveIntegerField(
+    cooking_time = models.PositiveSmallIntegerField(
         "Время приготовления в минутах",
         validators=[
             MinValueValidator(
-                1,
-                message="Время приготовления должно быть >= 1 минуты",
+                MIN_COOKING_TIME,
+                message=(
+                    f"Время приготовления не может быть меньше "
+                    f"{MIN_COOKING_TIME} минуты."
+                ),
+            ),
+            MaxValueValidator(
+                MAX_COOKING_TIME,
+                message=(
+                    f"Время приготовления не может быть больше "
+                    f"{MAX_COOKING_TIME} минут."
+                ),
             ),
         ],
     )
@@ -147,11 +179,24 @@ class RecipeIngredient(models.Model):
         related_name="ingredient_recipes",
         verbose_name="Ингредиент",
     )
-    amount = models.PositiveIntegerField(
+    amount = models.PositiveSmallIntegerField(
         "Количество",
-        default=1,
+        default=MIN_INGREDIENT_AMOUNT,
         validators=[
-            MinValueValidator(1, message="Количество должно быть >= 1"),
+            MinValueValidator(
+                MIN_INGREDIENT_AMOUNT,
+                message=(
+                    f"Количество не может быть меньше "
+                    f"{MIN_INGREDIENT_AMOUNT}."
+                ),
+            ),
+            MaxValueValidator(
+                MAX_INGREDIENT_AMOUNT,
+                message=(
+                    f"Количество не может быть больше "
+                    f"{MAX_INGREDIENT_AMOUNT}."
+                ),
+            ),
         ],
     )
 
@@ -160,6 +205,7 @@ class RecipeIngredient(models.Model):
 
         verbose_name = "ингредиент в рецепте"
         verbose_name_plural = "Ингредиенты в рецептах"
+        ordering = ["recipe", "ingredient"]
         constraints = [
             models.UniqueConstraint(
                 fields=["recipe", "ingredient"],
@@ -198,6 +244,7 @@ class RecipeTag(models.Model):
 
         verbose_name = "тег рецепта"
         verbose_name_plural = "Теги рецептов"
+        ordering = ["recipe", "tag"]
         constraints = [
             models.UniqueConstraint(
                 fields=["recipe", "tag"],
@@ -220,6 +267,7 @@ class UserRecipeRelation(models.Model):
         """Задает общие метаданные абстрактной связи."""
 
         abstract = True
+        ordering = ["id"]
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "recipe"],

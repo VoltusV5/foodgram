@@ -11,6 +11,11 @@ from django.views.static import serve
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("s/<int:pk>/", redirect_to_recipe, name="short-url"),
+    path(
+        "recipes/<int:pk>/",
+        TemplateView.as_view(template_name="index.html"),
+        name="recipe-detail",
+    ),
     path("api/", include("api.urls")),
     path(
         "api/docs/",

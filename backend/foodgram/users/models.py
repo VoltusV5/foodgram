@@ -3,6 +3,9 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+EMAIL_MAX_LENGTH = 254
+NAME_MAX_LENGTH = 150
+
 
 class User(AbstractUser):
     """Модель пользователя.
@@ -14,9 +17,13 @@ class User(AbstractUser):
         avatar: Изображение профиля пользователя.
     """
 
-    email = models.EmailField("Электронная почта", unique=True, max_length=254)
-    first_name = models.CharField("Имя", max_length=150)
-    last_name = models.CharField("Фамилия", max_length=150)
+    email = models.EmailField(
+        "Электронная почта",
+        unique=True,
+        max_length=EMAIL_MAX_LENGTH,
+    )
+    first_name = models.CharField("Имя", max_length=NAME_MAX_LENGTH)
+    last_name = models.CharField("Фамилия", max_length=NAME_MAX_LENGTH)
     avatar = models.ImageField(
         upload_to="users/avatars/",
         null=True,
@@ -96,7 +103,7 @@ class Follow(models.Model):
 
         verbose_name = "подписка"
         verbose_name_plural = "Подписки"
-        ordering = ("author",)
+        ordering = ["author"]
 
         constraints = [
             models.UniqueConstraint(

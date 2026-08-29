@@ -77,14 +77,12 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
 
         return queryset.annotate(
             is_favorited=Exists(
-                Favorite.objects.filter(
-                    user=user,
+                user.favorites.filter(
                     recipe=OuterRef("pk"),
                 ),
             ),
             is_in_shopping_cart=Exists(
-                ShoppingCart.objects.filter(
-                    user=user,
+                user.shopping_cart.filter(
                     recipe=OuterRef("pk"),
                 ),
             ),
@@ -239,4 +237,4 @@ def redirect_to_recipe(
         Перенаправление на страницу рецепта.
     """
     recipe = get_object_or_404(Recipe, pk=pk)
-    return redirect(f"/recipes/{recipe.pk}/")
+    return redirect("recipe-detail", pk=recipe.pk)

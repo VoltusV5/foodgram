@@ -2,7 +2,7 @@
 
 ![alt text](images/main_page_with_recipes.png)
 
-Проект доступен по адресу: <https://foodgram-voltusv.duckdns.org/>
+Проект доступен по адресу: <https://foodgram.srv-node.com/>
 
 Foodgram — это сервис для публикации кулинарных рецептов.
 Пользователь может найти блюда по тегам и ингредиентам, поделиться собственным
@@ -223,7 +223,9 @@ Workflow GitHub Actions запускается при push и pull request:
 3. публикует образы в Docker Hub;
 4. копирует production Compose на сервер;
 5. применяет миграции, собирает статику и обновляет контейнеры;
-6. отправляет уведомление об успешном деплое в Telegram.
+6. проверяет доступность API по HTTPS.
+
+Настройка сервера, секретов GitHub Actions и откат: [инструкция](infra/DEPLOYMENT.md).
 
 ## Автор
 

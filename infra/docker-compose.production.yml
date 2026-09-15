@@ -1,3 +1,11 @@
+name: foodgram
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 volumes:
   pg_data:
   static_volume:
@@ -7,35 +15,55 @@ services:
   db:
     image: postgres:16
     restart: unless-stopped
+    mem_limit: 384m
+    cpus: 0.50
+    logging: *logging
     env_file:
       - .env
     volumes:
       - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   backend:
-    image: ${DOCKER_USERNAME}/foodgram_backend:latest
+    image: ${DOCKER_USERNAME:?Set DOCKER_USERNAME}/foodgram_backend:${IMAGE_TAG:?Set IMAGE_TAG}
     restart: unless-stopped
+    mem_limit: 384m
+    cpus: 0.50
+    logging: *logging
     env_file:
       - .env
     volumes:
       - static_volume:/foodgram/collected_static
       - user_files:/foodgram/media
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
-    image: ${DOCKER_USERNAME}/foodgram_frontend:latest
+    image: ${DOCKER_USERNAME:?Set DOCKER_USERNAME}/foodgram_frontend:${IMAGE_TAG:?Set IMAGE_TAG}
+    mem_limit: 128m
+    cpus: 0.25
+    logging: *logging
     volumes:
       - static_volume:/static
 
   gateway:
-    image: ${DOCKER_USERNAME}/foodgram_gateway:latest
+    image: ${DOCKER_USERNAME:?Set DOCKER_USERNAME}/foodgram_gateway:${IMAGE_TAG:?Set IMAGE_TAG}
     restart: unless-stopped
+    mem_limit: 64m
+    cpus: 0.25
+    logging: *logging
     ports:
       - "127.0.0.1:8080:80"
     volumes:
       - static_volume:/static:ro
       - user_files:/media:ro
     depends_on:
-      - backend
-      - frontend
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_completed_successfully

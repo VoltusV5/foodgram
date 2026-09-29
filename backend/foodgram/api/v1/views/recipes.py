@@ -37,8 +37,8 @@ from ..pagination import CustomPagination
 from ..serializers.mixins import BaseRelationMixin
 from ..serializers.recipes import (
     IngredientSerializer,
-    RecipeReadSerializer,
     RecipeRatingSerializer,
+    RecipeReadSerializer,
     RecipeWriteSerializer,
     TagSerializer,
 )

@@ -385,4 +385,7 @@ class RecipeRating(models.Model):
 
     def __str__(self):
         """Возвращает представление оценки."""
-        return f"{self.recipe_id}: {self.value}/5 от пользователя {self.user_id}"
+        return (
+            f"{self.recipe_id}: {self.value}/5 "
+            f"от пользователя {self.user_id}"
+        )

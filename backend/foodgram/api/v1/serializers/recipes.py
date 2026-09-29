@@ -99,6 +99,13 @@ class RecipeReadSerializer(serializers.ModelSerializer):
     )
     is_favorited = serializers.BooleanField(default=False)
     is_in_shopping_cart = serializers.BooleanField(default=False)
+    rating = serializers.SerializerMethodField()
+    ratings_count = serializers.IntegerField(read_only=True, default=0)
+    user_rating = serializers.IntegerField(
+        read_only=True,
+        allow_null=True,
+        default=None,
+    )
     image = Base64ImageField()
 
     class Meta:
@@ -112,12 +119,28 @@ class RecipeReadSerializer(serializers.ModelSerializer):
             "ingredients",
             "is_favorited",
             "is_in_shopping_cart",
+            "rating",
+            "ratings_count",
+            "user_rating",
             "name",
             "image",
             "text",
             "cooking_time",
         )
         read_only_fields = fields
+
+    def get_rating(self, recipe: Recipe) -> float | None:
+        """Округляет среднюю оценку до одного знака после запятой."""
+        rating = getattr(recipe, "rating", None)
+        if rating is None:
+            return None
+        return round(float(rating), 1)
+
+
+class RecipeRatingSerializer(serializers.Serializer):
+    """Проверяет оценку, передаваемую пользователем."""
+
+    value = serializers.IntegerField(min_value=1, max_value=5)
 
 
 class RecipeWriteSerializer(serializers.ModelSerializer):

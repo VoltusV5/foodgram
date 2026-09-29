@@ -169,6 +169,18 @@ class Api {
     }).then(this.checkResponse);
   }
 
+  setRecipeRating({ id, value }) {
+    const token = localStorage.getItem("token");
+    return fetch(`/api/recipes/${id}/rating/`, {
+      method: "PUT",
+      headers: {
+        ...this._headers,
+        authorization: `Token ${token}`,
+      },
+      body: JSON.stringify({ value }),
+    }).then(this.checkResponse);
+  }
+
   createRecipe({
     name = "",
     image,

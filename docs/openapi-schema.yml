@@ -339,6 +339,40 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - Рецепты
+  /api/recipes/{id}/rating/:
+    put:
+      operationId: Оценить рецепт
+      description: 'Создает или обновляет оценку текущего пользователя. Доступно только авторизованным пользователям.'
+      security:
+        - Token: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Уникальный идентификатор рецепта."
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeRating'
+      responses:
+        '200':
+          description: 'Оценка сохранена'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeList'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '404':
+          $ref: '#/components/responses/RecipeNotFound'
+      tags:
+        - Оценки
   /api/recipes/{id}/favorite/:
     post:
       operationId: Добавить рецепт в избранное
@@ -892,6 +926,25 @@ components:
           readOnly: true
           type: boolean
           description: 'Находится ли в корзине'
+        rating:
+          readOnly: true
+          nullable: true
+          type: number
+          format: float
+          description: 'Средняя оценка рецепта по пятизвёздочной шкале'
+          example: 4.3
+        ratings_count:
+          readOnly: true
+          type: integer
+          description: 'Количество оставленных оценок'
+          example: 12
+        user_rating:
+          readOnly: true
+          nullable: true
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: 'Оценка текущего пользователя; null для гостя или если голос не оставлен'
         name:
           readOnly: true
           type: string
@@ -940,6 +993,17 @@ components:
           description: 'Сокращенная ссылка'
           format: uri
           example: 'https://foodgram.example.org/s/3d0'
+    RecipeRating:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: 'Оценка рецепта'
+          example: 5
     Ingredient:
       type: object
       properties:

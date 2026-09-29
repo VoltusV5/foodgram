@@ -1,7 +1,7 @@
 """Настройки админки для моделей рецептов."""
 
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models import Avg, Count
 from django.utils.html import format_html
 
 from .models import (
@@ -9,6 +9,7 @@ from .models import (
     Ingredient,
     Recipe,
     RecipeIngredient,
+    RecipeRating,
     RecipeTag,
     ShoppingCart,
     Tag,
@@ -48,10 +49,11 @@ class RecipeAdmin(admin.ModelAdmin):
         "get_tags",
         "get_image_preview",
         "get_favorites_count",
+        "get_rating",
     )
     list_filter = ("author", "tags__name")
     search_fields = ("name", "author__username", "tags__name")
-    readonly_fields = ("get_favorites_count",)
+    readonly_fields = ("get_favorites_count", "get_rating")
 
     @admin.display(description="Текущее изображение")
     def get_image_preview(self, obj):
@@ -71,7 +73,11 @@ class RecipeAdmin(admin.ModelAdmin):
             .get_queryset(request)
             .select_related("author")
             .prefetch_related("tags")
-            .annotate(favorites_count=Count("in_favorites"))
+            .annotate(
+                favorites_count=Count("in_favorites", distinct=True),
+                rating=Avg("ratings__value"),
+                ratings_count=Count("ratings", distinct=True),
+            )
         )
 
     @admin.display(description="Теги")
@@ -86,6 +92,13 @@ class RecipeAdmin(admin.ModelAdmin):
     def get_favorites_count(self, obj):
         """Возвращает количество добавлений рецепта в избранное."""
         return obj.favorites_count
+
+    @admin.display(description="Рейтинг", ordering="rating")
+    def get_rating(self, obj):
+        """Возвращает среднюю оценку и число голосов."""
+        if obj.rating is None:
+            return "Нет оценок"
+        return f"{obj.rating:.1f} ({obj.ratings_count})"
 
 
 @admin.register(Ingredient)
@@ -140,3 +153,13 @@ class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = ("user", "recipe")
     search_fields = ("user__username", "recipe__name")
     list_select_related = ("user", "recipe")
+
+
+@admin.register(RecipeRating)
+class RecipeRatingAdmin(admin.ModelAdmin):
+    """Панель управления оценками рецептов."""
+
+    list_display = ("recipe", "user", "value", "updated_at")
+    list_filter = ("value",)
+    search_fields = ("recipe__name", "user__username", "user__email")
+    list_select_related = ("recipe", "user")

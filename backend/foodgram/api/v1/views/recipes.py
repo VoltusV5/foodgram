@@ -1,6 +1,17 @@
 """ViewSet'ы API для рецептов."""
 
-from django.db.models import Exists, F, OuterRef, QuerySet, Sum
+from django.db.models import (
+    Avg,
+    Count,
+    Exists,
+    F,
+    IntegerField,
+    OuterRef,
+    QuerySet,
+    Subquery,
+    Sum,
+    Value,
+)
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -10,6 +21,7 @@ from recipes.models import (
     Ingredient,
     Recipe,
     RecipeIngredient,
+    RecipeRating,
     ShoppingCart,
     Tag,
 )
@@ -26,6 +38,7 @@ from ..serializers.mixins import BaseRelationMixin
 from ..serializers.recipes import (
     IngredientSerializer,
     RecipeReadSerializer,
+    RecipeRatingSerializer,
     RecipeWriteSerializer,
     TagSerializer,
 )
@@ -72,21 +85,36 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
             "recipe_ingredients__ingredient",
         )
 
-        if user.is_anonymous:
-            return queryset
+        annotations = {
+            "rating": Avg("ratings__value"),
+            "ratings_count": Count("ratings"),
+            "user_rating": Value(None, output_field=IntegerField()),
+            "is_favorited": Value(False),
+            "is_in_shopping_cart": Value(False),
+        }
 
-        return queryset.annotate(
-            is_favorited=Exists(
-                user.favorites.filter(
-                    recipe=OuterRef("pk"),
+        if not user.is_anonymous:
+            annotations.update(
+                is_favorited=Exists(
+                    user.favorites.filter(
+                        recipe=OuterRef("pk"),
+                    ),
                 ),
-            ),
-            is_in_shopping_cart=Exists(
-                user.shopping_cart.filter(
-                    recipe=OuterRef("pk"),
+                is_in_shopping_cart=Exists(
+                    user.shopping_cart.filter(
+                        recipe=OuterRef("pk"),
+                    ),
                 ),
-            ),
-        )
+                user_rating=Subquery(
+                    RecipeRating.objects.filter(
+                        user=user,
+                        recipe=OuterRef("pk"),
+                    ).values("value")[:1],
+                    output_field=IntegerField(),
+                ),
+            )
+
+        return queryset.annotate(**annotations)
 
     def get_serializer_class(
         self,
@@ -170,6 +198,32 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
             Ответ с рецептом или статусом удаления.
         """
         return self._manage_relation(Favorite, FavoriteSerializer)
+
+    @action(
+        detail=True,
+        methods=["put"],
+        permission_classes=[IsAuthenticated],
+    )
+    def rating(self, request: Request, pk: str | None = None) -> Response:
+        """Создает или обновляет оценку рецепта текущего пользователя."""
+        recipe = self.get_object()
+        serializer = RecipeRatingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        RecipeRating.objects.update_or_create(
+            user=request.user,
+            recipe=recipe,
+            defaults={"value": serializer.validated_data["value"]},
+        )
+
+        updated_recipe = self.get_queryset().get(pk=recipe.pk)
+        return Response(
+            RecipeReadSerializer(
+                updated_recipe,
+                context={"request": request},
+            ).data,
+            status=status.HTTP_200_OK,
+        )
 
     @action(
         detail=False,

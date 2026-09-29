@@ -32,9 +32,11 @@ import AccountMobile from './account-mobile'
 import Orders from './orders'
 import NavMenu from './nav-menu'
 import Popup from './popup'
+import StarRating from './star-rating'
 
 export {
   Popup,
+  StarRating,
   Header,
   AccountMenuMobile,
   AccountMobile,

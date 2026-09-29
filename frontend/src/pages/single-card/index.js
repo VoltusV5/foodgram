@@ -6,6 +6,7 @@ import {
   TagsContainer,
   Icons,
   LinkComponent,
+  StarRating,
 } from "../../components";
 import { UserContext, AuthContext } from "../../contexts";
 import { useContext, useState, useEffect } from "react";
@@ -27,6 +28,7 @@ const SingleCard = ({ loadItem, updateOrders }) => {
     text: "",
     position: "-100%",
   });
+  const [isRatingSaving, setIsRatingSaving] = useState(false);
   const { recipe, setRecipe, handleLike, handleAddToCart, handleSubscribe } =
     useRecipe();
   const authContext = useContext(AuthContext);
@@ -64,6 +66,20 @@ const SingleCard = ({ loadItem, updateOrders }) => {
     setNotificationError((prev) => ({ ...prev, position: "-100%" }));
   };
 
+  const handleRating = (value) => {
+    setIsRatingSaving(true);
+    api
+      .setRecipeRating({ id, value })
+      .then((updatedRecipe) => setRecipe(updatedRecipe))
+      .catch(() => {
+        setNotificationError({
+          text: "Не удалось сохранить оценку. Попробуйте ещё раз.",
+          position: "40px",
+        });
+      })
+      .finally(() => setIsRatingSaving(false));
+  };
+
   useEffect((_) => {
     api
       .getRecipe({
@@ -89,6 +105,9 @@ const SingleCard = ({ loadItem, updateOrders }) => {
     text,
     is_favorited,
     is_in_shopping_cart,
+    rating,
+    ratings_count,
+    user_rating,
   } = recipe;
 
   return (
@@ -199,6 +218,23 @@ const SingleCard = ({ loadItem, updateOrders }) => {
                   </Button>
                   <Tooltip id="tooltip-subscribe" />
                 </>
+              )}
+            </div>
+            <div className={styles["single-card__rating"]}>
+              <span className={styles["single-card__rating-label"]}>Оценка блюда:</span>
+              <StarRating
+                isSaving={isRatingSaving}
+                onRate={authContext ? handleRating : undefined}
+                rating={rating}
+                ratingsCount={ratings_count}
+                userRating={user_rating}
+              />
+              {!authContext && (
+                <LinkComponent
+                  className={styles["single-card__rating-login"]}
+                  href="/signin"
+                  title="Войдите, чтобы оценить"
+                />
               )}
             </div>
             <div className={styles["single-card__buttons"]}>

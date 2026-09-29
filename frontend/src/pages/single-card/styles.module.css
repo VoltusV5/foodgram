@@ -133,6 +133,23 @@
   margin-bottom: 40px;
 }
 
+.single-card__rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -18px 0 32px;
+}
+
+.single-card__rating-label {
+  font-weight: 600;
+}
+
+.single-card__rating-login {
+  color: #000;
+  text-decoration: underline;
+}
+
 .btnsBox {
   display: flex;
   align-items: center;
@@ -179,6 +196,10 @@
 
   .single-card__extra-info {
     margin-bottom: 30px;
+  }
+
+  .single-card__rating {
+    margin: -12px 0 28px;
   }
 
   .single-card__info {

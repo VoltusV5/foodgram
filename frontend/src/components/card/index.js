@@ -1,6 +1,13 @@
 import styles from "./style.module.css";
 import { Tooltip } from "react-tooltip";
-import { LinkComponent, Icons, Button, TagsContainer, Popup } from "../index";
+import {
+  LinkComponent,
+  Icons,
+  Button,
+  TagsContainer,
+  Popup,
+  StarRating,
+} from "../index";
 import { AuthContext } from "../../contexts";
 import { useContext, useState } from "react";
 import cn from "classnames";
@@ -15,6 +22,8 @@ const Card = ({
   tags,
   cooking_time,
   author = {},
+  rating,
+  ratings_count,
   handleLike,
   handleAddToCart,
   updateOrders,
@@ -78,6 +87,9 @@ const Card = ({
             />
           </div>
           <div className={styles.card__time}>{cooking_time} мин.</div>
+        </div>
+        <div className={styles.card__rating}>
+          <StarRating rating={rating} ratingsCount={ratings_count} />
         </div>
         <div className={styles.card__controls}>
           <Button

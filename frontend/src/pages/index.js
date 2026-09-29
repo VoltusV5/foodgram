@@ -14,6 +14,7 @@ import Technologies from "./technologies";
 import UpdateAvatar from "./update-avatar";
 import ResetPassword from "./password-reset";
 import NotFound from "./not-found";
+import Contacts from "./contacts";
 
 export {
   Main,
@@ -32,4 +33,5 @@ export {
   ChangePassword,
   UpdateAvatar,
   NotFound,
+  Contacts,
 };

@@ -23,6 +23,14 @@ const Footer = () => {
           </li>
           <li className={styles['footer__menu-item']}>
             <LinkComponent
+              title='Контакты'
+              href='/contacts'
+              exact
+              className={styles['footer__menu-link']}
+            />
+          </li>
+          <li className={styles['footer__menu-item']}>
+            <LinkComponent
               title='Технологии'
               href='/technologies'
               exact
@@ -32,7 +40,7 @@ const Footer = () => {
         </ul>
       </div>
 
-      <div class={styles.footer__copyright}>
+      <div className={styles.footer__copyright}>
       © {(new Date()).getFullYear()}
       </div>
     </Container>

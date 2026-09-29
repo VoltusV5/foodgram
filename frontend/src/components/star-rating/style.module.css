@@ -1,0 +1,62 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #777;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.stars {
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 1px;
+}
+
+.star,
+.starActive,
+.button,
+.buttonActive {
+  color: #c7c7c7;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.starActive,
+.buttonActive {
+  color: #ffb800;
+}
+
+.button,
+.buttonActive {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.button:hover,
+.button:focus-visible,
+.buttonActive:hover,
+.buttonActive:focus-visible {
+  color: #ff9d00;
+  outline: none;
+  transform: scale(1.12);
+}
+
+.button:focus-visible,
+.buttonActive:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+.button:disabled,
+.buttonActive:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.value {
+  white-space: nowrap;
+}

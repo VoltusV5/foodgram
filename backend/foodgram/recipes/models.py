@@ -16,6 +16,8 @@ MIN_COOKING_TIME = 1
 MAX_COOKING_TIME = 32_000
 MIN_INGREDIENT_AMOUNT = 1
 MAX_INGREDIENT_AMOUNT = 32_000
+MIN_RATING_VALUE = 1
+MAX_RATING_VALUE = 5
 
 
 class Tag(models.Model):
@@ -334,3 +336,53 @@ class ShoppingCart(UserRecipeRelation):
 
         verbose_name = "список покупок"
         verbose_name_plural = "Списки покупок"
+
+
+class RecipeRating(models.Model):
+    """Оценка рецепта, оставленная авторизованным пользователем."""
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="recipe_ratings",
+        verbose_name="Пользователь",
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="ratings",
+        verbose_name="Рецепт",
+    )
+    value = models.PositiveSmallIntegerField(
+        "Оценка",
+        validators=[
+            MinValueValidator(MIN_RATING_VALUE),
+            MaxValueValidator(MAX_RATING_VALUE),
+        ],
+    )
+    created_at = models.DateTimeField("Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField("Дата изменения", auto_now=True)
+
+    class Meta:
+        """Задает метаданные оценки рецепта."""
+
+        verbose_name = "оценка рецепта"
+        verbose_name_plural = "Оценки рецептов"
+        ordering = ["-updated_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "recipe"],
+                name="unique_recipe_rating_per_user",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(
+                    value__gte=MIN_RATING_VALUE,
+                    value__lte=MAX_RATING_VALUE,
+                ),
+                name="recipe_rating_value_between_1_and_5",
+            ),
+        ]
+
+    def __str__(self):
+        """Возвращает представление оценки."""
+        return f"{self.recipe_id}: {self.value}/5 от пользователя {self.user_id}"

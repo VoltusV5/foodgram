@@ -23,6 +23,7 @@ import {
   UpdateAvatar,
   ResetPassword,
   Technologies,
+  Contacts,
 } from "./pages";
 
 import { AuthContext, UserContext } from "./contexts";
@@ -305,6 +306,10 @@ function App() {
             <Route exact path="/technologies">
               { /* <NotFound /> */ }
               <Technologies component={Technologies} />
+            </Route>
+
+            <Route exact path="/contacts">
+              <Contacts />
             </Route>
 
             <Route exact path="/recipes">

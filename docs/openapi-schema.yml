@@ -1,7 +1,34 @@
 openapi: 3.0.2
 info:
-  title: 'Foodgram'
-  version: ''
+  title: 'Foodgram API'
+  description: 'REST API веб-сервиса публикации кулинарных рецептов Foodgram.'
+  version: '1.6.1'
+  contact:
+    name: 'Администрация Foodgram'
+    email: 'maxt.spb@gmail.com'
+    url: 'https://foodgram.srv-node.com/contacts'
+servers:
+  - url: 'https://foodgram.srv-node.com'
+    description: 'Основной рабочий сервер (Production)'
+  - url: 'http://localhost'
+    description: 'Локальное окружение разработки'
+tags:
+  - name: 'Рецепты'
+    description: 'Просмотр, создание, редактирование и получение ссылок на рецепты'
+  - name: 'Оценки'
+    description: 'Выставление и обновление рейтинга рецептов (1-5 звёзд)'
+  - name: 'Избранное'
+    description: 'Добавление рецептов в избранное и удаление из него'
+  - name: 'Список покупок'
+    description: 'Управление корзиной покупок и выгрузка списка ингредиентов'
+  - name: 'Пользователи'
+    description: 'Регистрация, получение профилей и управление аватаром'
+  - name: 'Подписки'
+    description: 'Управление подписками на авторов рецептов'
+  - name: 'Ингредиенты'
+    description: 'Просмотр справочника ингредиентов'
+  - name: 'Теги'
+    description: 'Просмотр списка тегов для блюд'
 paths:
   /api/users/:
     get:

@@ -7,7 +7,7 @@ from users.models import User
 
 
 class RecipeRatingAPITest(APITestCase):
-    """Проверяет создание, изменение и агрегацию оценок."""
+    """Проверяет создание, изменение и управление оценками."""
 
     def setUp(self) -> None:
         self.author = User.objects.create_user(
@@ -33,7 +33,7 @@ class RecipeRatingAPITest(APITestCase):
         self.url = f"/api/recipes/{self.recipe.id}/rating/"
 
     def test_authenticated_user_can_create_and_change_rating(self) -> None:
-        """Повторная оценка изменяет голос, а не создает новый."""
+        """Повторная оценка изменяет голос, не создавая новый."""
         self.client.force_authenticate(self.user)
 
         response = self.client.put(self.url, {"value": 5}, format="json")
@@ -71,7 +71,7 @@ class RecipeRatingAPITest(APITestCase):
         self.assertEqual(response.data["user_rating"], 5)
 
     def test_rating_requires_authentication_and_valid_value(self) -> None:
-        """Голосовать могут только авторизованные пользователи значением 1–5."""
+        """Голосовать могут только авторизованные пользователи."""
         response = self.client.put(self.url, {"value": 5}, format="json")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 

@@ -12,7 +12,6 @@ Gateway: `127.0.0.1:8080`; PostgreSQL не публикует порт нару�
 - `HOST`: `srv-node.com`
 - `USER`: `admin`
 - `SSH_PORT`: `22222`
-- `SSH_HOST_FINGERPRINT`: `SHA256:Yd94qghKV0QZeV0/lewPM2ee8dl4v9rkOhPAtg2sA5U`
 - `SSH_KEY`: содержимое приватного ключа `/home/user/.ssh/id_ed25519` из Ubuntu WSL, включая строки BEGIN/END. Это уже авторизованный ключ. Не добавляйте его в репозиторий и не отправляйте в чат. Отдельный ключ CI/CD не создавался.
 - `DOCKER_USERNAME`: ваш логин Docker Hub (нижний регистр).
 - `DOCKER_PASSWORD`: Docker Hub access token с правом Read & Write.

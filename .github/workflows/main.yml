@@ -124,12 +124,10 @@ jobs:
           DEPLOY_HOST: ${{ secrets.HOST }}
           DEPLOY_USER: ${{ secrets.USER }}
           DEPLOY_PORT: ${{ secrets.SSH_PORT }}
-          DEPLOY_FINGERPRINT: ${{ secrets.SSH_HOST_FINGERPRINT }}
         run: |
           test "$DEPLOY_HOST" = srv-node.com || test "$DEPLOY_HOST" = 2.27.205.29
           test "$DEPLOY_USER" = admin
           test "$DEPLOY_PORT" = 22222
-          test "$DEPLOY_FINGERPRINT" = 'SHA256:Yd94qghKV0QZeV0/lewPM2ee8dl4v9rkOhPAtg2sA5U'
       - name: Copy production Compose file
         uses: appleboy/scp-action@v1
         with:
@@ -137,7 +135,6 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          fingerprint: ${{ secrets.SSH_HOST_FINGERPRINT }}
           source: infra/docker-compose.production.yml,infra/deploy.sh,infra/backup.sh
           target: /opt/foodgram
           strip_components: 1
@@ -148,7 +145,6 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          fingerprint: ${{ secrets.SSH_HOST_FINGERPRINT }}
           command_timeout: 15m
           script: |
             set -eu

@@ -1,6 +1,6 @@
 """Проверки API оценок рецептов."""
 
-from recipes.models import Recipe, RecipeRating
+from recipes.models import Recipe, RecipeRating, Tag
 from rest_framework import status
 from rest_framework.test import APITestCase
 from users.models import User
@@ -80,3 +80,18 @@ class RecipeRatingAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(RecipeRating.objects.count(), 0)
+
+    def test_ratings_count_not_duplicated_when_filtering_by_tags(self) -> None:
+        """Количество оценок не дублируется при фильтрации по нескольким тегам."""
+        tag1 = Tag.objects.create(name="Завтрак", slug="breakfast")
+        tag2 = Tag.objects.create(name="Обед", slug="lunch")
+        self.recipe.tags.add(tag1, tag2)
+        RecipeRating.objects.create(user=self.user, recipe=self.recipe, value=5)
+
+        response = self.client.get(f"/api/recipes/?tags={tag1.slug}&tags={tag2.slug}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        results = response.data.get("results", response.data)
+        recipe_data = next(r for r in results if r["id"] == self.recipe.id)
+        self.assertEqual(recipe_data["ratings_count"], 1)
+        self.assertEqual(recipe_data["rating"], 5.0)
+

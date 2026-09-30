@@ -87,7 +87,7 @@ class RecipeViewSet(BaseRelationMixin, viewsets.ModelViewSet):
 
         annotations = {
             "rating": Avg("ratings__value"),
-            "ratings_count": Count("ratings"),
+            "ratings_count": Count("ratings", distinct=True),
             "user_rating": Value(None, output_field=IntegerField()),
             "is_favorited": Value(False),
             "is_in_shopping_cart": Value(False),

@@ -98,7 +98,7 @@ class RecipeAdmin(admin.ModelAdmin):
         """Возвращает среднюю оценку и число голосов."""
         if obj.rating is None:
             return "Нет оценок"
-        return f"{obj.rating:.1f} ({obj.ratings_count})"
+        return f"{round(obj.rating, 1)} ({obj.ratings_count})"
 
 
 @admin.register(Ingredient)
